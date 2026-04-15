@@ -3,98 +3,192 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TaskFlow Pro</title>
+    <title>TaskFlow Pro | Vibrant Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        :root {
+            --primary: #CA6180;   /* Muted Rose */
+            --secondary: #FCB7C7; /* Soft Pink (Title color now) */
+            /* Aapka pasandeeda naya background color */
+            --vibrant-bg: #F13E93; 
+            --container-dark: #0f172a; /* Contrast dark background for box */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+
         body {
-            background: linear-gradient(135deg, #1e1e2f 0%, #111119 100%);
-            height: 100vh; display: flex; justify-content: center; align-items: center; color: white;
+            /* Poora background ab ye vibrant pink hoga */
+            background-color: var(--vibrant-bg);
+            /* Aik halka sa gradient mazeed depth ke liye */
+            background-image: linear-gradient(135deg, #F13E93 0%, #ca337a 100%);
+            min-height: 100vh;
+            display: flex; justify-content: center; align-items: center;
+            color: white; /* Default text white rahega dark containers ke liye */
+            overflow-x: hidden;
         }
+
         .container {
-            background: rgba(255, 255, 255, 0.05);
+            /* Dark glass effect vibrant background ke liye */
+            background: rgba(15, 23, 42, 0.6);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 30px; border-radius: 20px;
-            width: 400px; box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 40px; border-radius: 30px;
+            width: 450px; 
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
         }
-        h2 { margin-bottom: 20px; font-weight: 300; text-align: center; letter-spacing: 2px; }
-        .input-group { display: flex; gap: 10px; margin-bottom: 20px; }
-        input {
-            flex: 1; padding: 12px; border-radius: 10px; border: none;
-            background: rgba(255,255,255,0.1); color: white; outline: none;
+
+        /* Title updated to Soft Pink for readability */
+        h2 { 
+            font-weight: 600; 
+            text-align: center; 
+            margin-bottom: 30px; 
+            letter-spacing: 1px;
+            color: var(--secondary); 
         }
-        button#add-btn {
-            padding: 12px 20px; border-radius: 10px; border: none;
-            background: #00d2ff; color: white; cursor: pointer; font-weight: bold;
+
+        .input-area { display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px; }
+
+        /* Input fields in dark contrast */
+        input, select {
+            padding: 14px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05); color: white; outline: none;
             transition: 0.3s;
         }
-        button#add-btn:hover { background: #3a7bd5; transform: scale(1.05); }
-        ul { list-style: none; max-height: 300px; overflow-y: auto; }
-        li {
-            background: rgba(255,255,255,0.05); padding: 12px;
-            border-radius: 10px; margin-bottom: 10px;
-            display: flex; justify-content: space-between; align-items: center;
-            animation: fadeIn 0.5s ease;
+
+        input:focus { 
+            border-color: var(--secondary);
+            box-shadow: 0 0 15px rgba(252, 183, 199, 0.3);
+            background: rgba(255, 255, 255, 0.08);
         }
-        .delete-btn { color: #ff4d4d; cursor: pointer; font-weight: bold; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        input::placeholder { color: rgba(255,255,255,0.4); }
+
+        .btn-add {
+            padding: 14px; border-radius: 12px; border: none;
+            /* Reverse gradient for pop */
+            background: linear-gradient(90deg, #F13E93, var(--secondary));
+            color: white; cursor: pointer; font-weight: 600; transition: 0.4s;
+        }
+
+        .btn-add:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 10px 20px rgba(252, 183, 199, 0.3); 
+        }
+
+        ul { list-style: none; }
+
+        /* Task list item styling in dark contrast */
+        li {
+            background: rgba(255, 255, 255, 0.05); 
+            padding: 15px;
+            border-radius: 15px; margin-bottom: 12px;
+            display: flex; justify-content: space-between; align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-left: 5px solid var(--secondary);
+            animation: slideIn 0.4s ease forwards;
+        }
+
+        .category-tag {
+            font-size: 10px; text-transform: uppercase; padding: 4px 8px;
+            border-radius: 6px; margin-left: 10px; font-weight: bold; color: white;
+        }
+
+        .work { background: #5ea1ff; }
+        .personal { background: #5cdba7; }
+        .urgent { background: #ff7c7c; }
+
+        .delete-btn { color: rgba(255,255,255,0.3); cursor: pointer; font-size: 18px; transition: 0.3s; }
+        .delete-btn:hover { color: #ff4d4d; }
+
+        @keyframes slideIn { 
+            from { opacity: 0; transform: translateY(10px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h2>TaskFlow Pro</h2>
-    <div class="input-group">
-        <input type="text" id="taskInput" placeholder="Add a new task...">
-        <button id="add-btn" onclick="addTask()">Add</button>
+    
+    <div class="input-area">
+        <input type="text" id="taskInput" placeholder="Write your task here...">
+        <div style="display: flex; gap: 10px;">
+            <select id="categorySelect" style="flex: 1;">
+                <option value="work">Work</option>
+                <option value="personal">Personal</option>
+                <option value="urgent">Urgent</option>
+            </select>
+            <input type="date" id="dateInput" style="flex: 1.5;">
+        </div>
+        <button class="btn-add" onclick="addTask()">Add Task</button>
     </div>
+
     <ul id="taskList"></ul>
 </div>
 
 <script>
-    const taskInput = document.getElementById('taskInput');
     const taskList = document.getElementById('taskList');
 
-    // Load tasks from Local Storage
-    document.addEventListener('DOMContentLoaded', getTasks);
-
     function addTask() {
-        if (taskInput.value === '') return;
+        const input = document.getElementById('taskInput');
+        const cat = document.getElementById('categorySelect');
+        const date = document.getElementById('dateInput');
+
+        if (!input.value) return;
+
+        const taskData = {
+            id: Date.now(),
+            text: input.value,
+            category: cat.value,
+            dueDate: date.value || 'No Date'
+        };
+
+        createTaskUI(taskData);
+        saveTask(taskData);
         
-        createTaskElement(taskInput.value);
-        saveLocal(taskInput.value);
-        taskInput.value = '';
+        // Celebration Effect matching vibrant colors
+        confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 },
+            colors: ['#F13E93', '#FCB7C7']
+        });
+        
+        input.value = '';
     }
 
-    function createTaskElement(text) {
+    function createTaskUI(data) {
         const li = document.createElement('li');
-        li.innerHTML = `<span>${text}</span><span class="delete-btn" onclick="removeTask(this)">✕</span>`;
+        li.innerHTML = `
+            <div>
+                <strong>${data.text}</strong>
+                <br><small style="color: rgba(255,255,255,0.6);">${data.dueDate}</small>
+                <span class="category-tag ${data.category}">${data.category}</span>
+            </div>
+            <span class="delete-btn" onclick="removeTask(${data.id}, this)">✕</span>
+        `;
         taskList.appendChild(li);
     }
 
-    function removeTask(btn) {
-        const task = btn.parentElement;
-        removeLocal(task.children[0].innerText);
-        task.remove();
-    }
-
-    // Local Storage Functions
-    function saveLocal(task) {
-        let tasks = localStorage.getItem('tasks') ? JSON.parse(localStorage.getItem('tasks')) : [];
+    function saveTask(task) {
+        let tasks = JSON.parse(localStorage.getItem('vibrant-tasks-data') || '[]');
         tasks.push(task);
-        localStorage.setItem('tasks', JSON.stringify(tasks));
+        localStorage.setItem('vibrant-tasks-data', JSON.stringify(tasks));
     }
 
-    function getTasks() {
-        let tasks = localStorage.getItem('tasks') ? JSON.parse(localStorage.getItem('tasks')) : [];
-        tasks.forEach(task => createTaskElement(task));
+    function removeTask(id, element) {
+        let tasks = JSON.parse(localStorage.getItem('vibrant-tasks-data'));
+        tasks = tasks.filter(t => t.id !== id);
+        localStorage.setItem('vibrant-tasks-data', JSON.stringify(tasks));
+        element.parentElement.remove();
     }
 
-    function removeLocal(task) {
-        let tasks = JSON.parse(localStorage.getItem('tasks'));
-        tasks = tasks.filter(t => t !== task);
-        localStorage.setItem('tasks', JSON.stringify(tasks));
-    }
+    window.onload = () => {
+        const tasks = JSON.parse(localStorage.getItem('vibrant-tasks-data') || '[]');
+        tasks.forEach(t => createTaskUI(t));
+    };
 </script>
 </body>
 </html>
