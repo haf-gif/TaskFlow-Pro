@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow Pro</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body {
+            background: linear-gradient(135deg, #1e1e2f 0%, #111119 100%);
+            height: 100vh; display: flex; justify-content: center; align-items: center; color: white;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 30px; border-radius: 20px;
+            width: 400px; box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+        h2 { margin-bottom: 20px; font-weight: 300; text-align: center; letter-spacing: 2px; }
+        .input-group { display: flex; gap: 10px; margin-bottom: 20px; }
+        input {
+            flex: 1; padding: 12px; border-radius: 10px; border: none;
+            background: rgba(255,255,255,0.1); color: white; outline: none;
+        }
+        button#add-btn {
+            padding: 12px 20px; border-radius: 10px; border: none;
+            background: #00d2ff; color: white; cursor: pointer; font-weight: bold;
+            transition: 0.3s;
+        }
+        button#add-btn:hover { background: #3a7bd5; transform: scale(1.05); }
+        ul { list-style: none; max-height: 300px; overflow-y: auto; }
+        li {
+            background: rgba(255,255,255,0.05); padding: 12px;
+            border-radius: 10px; margin-bottom: 10px;
+            display: flex; justify-content: space-between; align-items: center;
+            animation: fadeIn 0.5s ease;
+        }
+        .delete-btn { color: #ff4d4d; cursor: pointer; font-weight: bold; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>TaskFlow Pro</h2>
+    <div class="input-group">
+        <input type="text" id="taskInput" placeholder="Add a new task...">
+        <button id="add-btn" onclick="addTask()">Add</button>
+    </div>
+    <ul id="taskList"></ul>
+</div>
+
+<script>
+    const taskInput = document.getElementById('taskInput');
+    const taskList = document.getElementById('taskList');
+
+    // Load tasks from Local Storage
+    document.addEventListener('DOMContentLoaded', getTasks);
+
+    function addTask() {
+        if (taskInput.value === '') return;
+        
+        createTaskElement(taskInput.value);
+        saveLocal(taskInput.value);
+        taskInput.value = '';
+    }
+
+    function createTaskElement(text) {
+        const li = document.createElement('li');
+        li.innerHTML = `<span>${text}</span><span class="delete-btn" onclick="removeTask(this)">✕</span>`;
+        taskList.appendChild(li);
+    }
+
+    function removeTask(btn) {
+        const task = btn.parentElement;
+        removeLocal(task.children[0].innerText);
+        task.remove();
+    }
+
+    // Local Storage Functions
+    function saveLocal(task) {
+        let tasks = localStorage.getItem('tasks') ? JSON.parse(localStorage.getItem('tasks')) : [];
+        tasks.push(task);
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+
+    function getTasks() {
+        let tasks = localStorage.getItem('tasks') ? JSON.parse(localStorage.getItem('tasks')) : [];
+        tasks.forEach(task => createTaskElement(task));
+    }
+
+    function removeLocal(task) {
+        let tasks = JSON.parse(localStorage.getItem('tasks'));
+        tasks = tasks.filter(t => t !== task);
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+</script>
+</body>
+</html>

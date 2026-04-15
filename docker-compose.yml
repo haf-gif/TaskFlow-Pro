@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  taskflow-service:
+    build: .
+    image: taskflow-pro
+    container_name: taskflow-pro
+    ports:
+      - "9001:8080" # Maps local port 80 to container port 8080
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
